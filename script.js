@@ -36,9 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       gradient.addColorStop(0, `rgba(255,0,0,${wave.alpha})`);
       gradient.addColorStop(0.17, `rgba(255,127,0,${wave.alpha})`);
-    //   gradient.addColorStop(0.33, `rgba(255,255,0,${wave.alpha})`);
-    //   gradient.addColorStop(0.5, `rgba(0,255,0,${wave.alpha})`);
-      gradient.addColorStop(0.67, `rgba(0,0,255,${wave.alpha})`);
+      gradient.addColorStop(0.33, `rgba(255,255,0,${wave.alpha})`);
+      // gradient.addColorStop(0.5, `rgba(0,255,0,${wave.alpha})`);
+      // gradient.addColorStop(0.67, `rgba(0,0,255,${wave.alpha})`);
       gradient.addColorStop(0.83, `rgba(75,0,130,${wave.alpha})`);
       gradient.addColorStop(1, `rgba(148,0,211,${wave.alpha})`);
 
@@ -52,11 +52,33 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(animate);
   }
 
-  document.addEventListener("mousemove", (e) => {
-    drawWave(e.clientX, e.clientY);
+  function handleMovement(e) {
+    let x, y;
+
+    // For mouse events
+    if (e.type === "mousemove") {
+      x = e.clientX;
+      y = e.clientY;
+    }
+
+    // For touch events
+    if (e.type === "touchmove") {
+      e.preventDefault();
+      const touch = e.touches[0];
+      x = touch.clientX;
+      y = touch.clientY;
+    }
+
+    drawWave(x, y);
+  }
+
+  document.addEventListener("mousemove", handleMovement);
+  document.addEventListener("touchmove", handleMovement);
+  document.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    drawWave(touch.clientX, touch.clientY);
   });
 
   animate();
 });
-
-
